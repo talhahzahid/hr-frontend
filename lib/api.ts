@@ -1,6 +1,6 @@
 // const BASE_URL = "https://unrollable-psychodelic-dalia.ngrok-free.dev";
-const BASE_URL = "http://localhost:8000/";
-// const BASE_URL = "https://hr-backend-1y26.onrender.com/";
+// const BASE_URL = "http://localhost:8000/";
+const BASE_URL = "https://hr-backend-1y26.onrender.com/";
 
 interface ApiRequest {
   endpoint: string;

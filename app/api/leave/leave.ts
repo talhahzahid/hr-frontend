@@ -1,102 +1,61 @@
-// import { api } from "@/lib/api";
-
-// export interface LeaveData {
-//   id: number;
-//   employeeId: number;
-//   leaveType: string;
-//   startDate: string;
-//   endDate: string;
-//   totalDays: string;
-//   session: string;
-//   reason: string;
-//   status: string;
-//   approvedBy: number | null;
-//   rejectionReason: string | null;
-//   createdAt: string;
-//   updatedAt: string;
-// }
-
-// interface LeaveResponse {
-//   code: string;
-//   message: string;
-//   responseData: {
-//     data: LeaveData;
-//   };
-// }
-
-// export const getLeaves = () => {
-//   return api<LeaveResponse>({
-//     endpoint: "/leaveLog/getLeaves",
-//   });
-// };
-
-// // Apply Leave Payload
-// export interface ApplyLeaveRequest {
-//   employeeId: string | number | any;
-//   leaveType: string;
-//   session: string;
-//   reason: string;
-//   totalDays: number;
-//   startDate: string;
-//   endDate: string;
-// }
-
-// export const applyLeaves = (payload: ApplyLeaveRequest) => {
-//   return api<LeaveResponse>({
-//     endpoint: "/api/v2/create",
-//     options: {
-//       method: "POST",
-//       body: JSON.stringify(payload),
-//     },
-//   });
-// };
-
-// // Leave Status List Item
-// export interface LeaveRequest {
-//   id: number;
-//   employeeId: number;
-//   leaveType: string;
-//   startDate: string;
-//   endDate: string;
-//   totalDays: string;
-//   session: string;
-//   reason: string;
-//   status: string;
-//   approvedBy: number;
-//   rejectionReason: string | null;
-//   createdAt: string;
-//   updatedAt: string;
-// }
-
-// export interface LeaveStatusListResponse {
-//   success: boolean;
-//   message: string;
-//   data: {
-//     leaveRequests: LeaveRequest[];
-//     totalRecords: number;
-//     totalPages: number;
-//     currentPage: number;
-//     pageSize: number;
-//   };
-// }
-
-// export const getLeaveStatusList = ({ id }: { id: number }) => {
-//   return api<LeaveStatusListResponse>({
-//     endpoint: `/api/v2/employee/${id}/leaves`,
-//   });
-// };
-
 import { api } from "@/lib/api";
 
 /* ============================
  * Types
  * ============================ */
 
-export type LeaveType = "Sick" | "Casual" | "Annual";
+export type LeaveType = "Annual" | "Casual" | "Sick";
 
 export type LeaveSession = "Full Day" | "First Half" | "Second Half";
 
 export type LeaveStatus = "Pending" | "Approved" | "Rejected";
+
+/* ============================
+ * Leave Balance
+ * (GET /employee/:id/balances)
+ * ============================ */
+
+export interface LeaveBalance {
+  id: number;
+  employeeId: number;
+  leaveType: LeaveType | string;
+  year: number;
+  allocated: string;
+  used: string;
+  remaining: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GetLeavesResponse {
+  success: boolean;
+  message: string;
+  data: {
+    employeeId: number;
+    year: number;
+    quotas: {
+      Annual: number;
+      Casual: number;
+      Sick: number;
+    };
+    balances: LeaveBalance[];
+  };
+}
+
+export const getLeaves = (
+  id: number,
+  params: { year: number }
+) => {
+  return api<GetLeavesResponse>({
+    endpoint: `/api/v2/employee/${id}/balances`,
+    params,
+  });
+};
+
+/* ============================
+ * Leave Request
+ * (Create & List)
+ * ============================ */
 
 export interface Leave {
   id: number;
@@ -113,22 +72,6 @@ export interface Leave {
   createdAt: string;
   updatedAt: string;
 }
-
-/* ============================
- * Get Leaves Response
- * ============================ */
-
-export interface GetLeavesResponse {
-  success: boolean;
-  message: string;
-  data: Leave[];
-}
-
-export const getLeaves = () => {
-  return api<GetLeavesResponse>({
-    endpoint: "/leaveLog/getLeaves",
-  });
-};
 
 /* ============================
  * Apply Leave
