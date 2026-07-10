@@ -119,8 +119,21 @@ export interface LeaveStatusListResponse {
   };
 }
 
+
+export interface LeaveStatusListRes {
+  success: boolean;
+  message: string;
+  data: {
+    leaveRequests: Leave[];
+    totalRecords: number;
+    totalPages: number;
+    currentPage: number;
+    pageSize: number;
+  };
+}
+
 export const getLeaveStatusList = ({ id }: { id: number }) => {
-  return api<LeaveStatusListResponse>({
+  return api<LeaveStatusListRes>({
     endpoint: `/api/v2/employee/${id}/leaves`,
   });
 };

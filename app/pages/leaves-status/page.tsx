@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { CalendarDays, Clock3, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { getLeaveStatusList, LeaveRequest } from "@/app/api/leave/leave";
+import { getLeaveStatusList, Leave } from "@/app/api/leave/leave";
 
 type LeaveStatus = "Approved" | "Pending" | "Rejected";
 
@@ -33,7 +33,7 @@ function normalizeStatus(status: string): LeaveStatus {
 }
 
 export default function LeaveStatusPage() {
-    const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>([]);
+    const [leaveRequests, setLeaveRequests] = useState<Leave[]>([]);
     const [loading, setLoading] = useState(true);
 
 

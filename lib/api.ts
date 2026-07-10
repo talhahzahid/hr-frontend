@@ -51,8 +51,8 @@ export async function api<T = unknown>({
   // if (!response.ok) {
   //   throw { status: response.status, message: response.statusText, data };
   // }
-if (!response.ok) {
-  return data as T;
-}
+  if (!response.ok) {
+    return data as T;
+  }
   return data as T;
 }
