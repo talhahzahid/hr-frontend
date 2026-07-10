@@ -25,9 +25,9 @@ export const checkIn = (body: any) => {
   });
 };
 
-export const checkOut = (id: number, body: Body) => {
+export const checkOut = (body: any) => {
   return api<checkInOutResponse>({
-    endpoint: `/api/v3/attendance/${id}/check-out`,
+    endpoint: `/api/v3/check-out`,
     options: {
       method: "PATCH",
       body: JSON.stringify(body),

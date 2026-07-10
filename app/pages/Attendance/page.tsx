@@ -73,7 +73,7 @@ const page = () => {
             {attendanceReport.map((item) => (
               <Card
                 key={item.id}
-                employeeId={item?.id}
+                employeeId={item?.employeeId}
                 createdAt={item?.createdAt}
                 checkInTime={item?.checkInTime}
                 checkOutTime={item?.checkOutTime}

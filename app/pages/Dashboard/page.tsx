@@ -202,11 +202,11 @@ const handleSignOut = async () => {
   const checkOutTime = formatLocalDateTime(now); // "2026-07-08T13:19:00"
 
   const body = {
-    checkOutTime,
+    employeeId,
   };
 
   try {
-    const result = await checkOut(userData?.id, body);
+    const result = await checkOut(body);
     console.log(result);
 
     if (result?.success === true) {
