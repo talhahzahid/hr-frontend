@@ -1,11 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { login } from "@/app/api/auth/user";
-import { Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 // Zod Schema
@@ -17,6 +17,7 @@ const loginSchema = z.object({
 type LoginFormData = z.infer<typeof loginSchema>;
 
 const Page = () => {
+    const [showPassword, setShowPassword] = useState(false)
     const {
         register,
         handleSubmit,
@@ -28,11 +29,8 @@ const Page = () => {
     const onSubmit = async (data: LoginFormData) => {
         try {
             const result = await login(data);
-
-
             if (result?.success) {
                 toast.success(result.message);
-
                 localStorage.setItem(
                     "user",
                     JSON.stringify({
@@ -43,10 +41,11 @@ const Page = () => {
                         designation: result.data.employee.designation,
                     })
                 );
-
                 setTimeout(() => {
                     window.location.href = "/pages/Dashboard";
                 }, 800);
+            } else {
+                toast.error(result?.message)
             }
 
         } catch (error: any) {
@@ -97,14 +96,30 @@ const Page = () => {
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                 Password
                             </label>
-                            <input
-                                type="password"
-                                placeholder="••••••••"
-                                {...register("password")}
-                                className="w-full px-4 py-3 rounded-lg border border-gray-300 
-                focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
-                outline-none transition"
-                            />
+
+                            <div className="relative">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    placeholder="••••••••"
+                                    {...register("password")}
+                                    className="w-full px-4 py-3 pr-12 rounded-lg border border-gray-300
+    focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+    outline-none transition"
+                                />
+
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
+                                >
+                                    {showPassword ? (
+                                        <EyeOff className="h-5 w-5" />
+                                    ) : (
+                                        <Eye className="h-5 w-5" />
+                                    )}
+                                </button>
+                            </div>
+
                             {errors.password && (
                                 <p className="text-red-500 text-sm mt-1">
                                     {errors.password.message}
